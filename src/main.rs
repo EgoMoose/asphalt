@@ -76,11 +76,16 @@ async fn check_file(entry: &DirEntry, state: &State) -> anyhow::Result<Option<Fi
         .file_name()
         .context("Failed to get path file name")?
         .to_str()
-        .context("Failed to convert path file name to string")?;
+        .context("Failed to convert path file name to string slice")?;
+
+    let asset_override = state
+        .overrides
+        .and_then(|overrides| overrides.get(file_name).cloned());
 
     let asset_id = upload_asset(
         bytes,
-        file_name,
+        // display_name,
+        // Some(asset_override),
         asset_type,
         state.api_key.clone(),
         state.creator.clone(),

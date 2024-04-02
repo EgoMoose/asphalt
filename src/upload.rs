@@ -64,7 +64,8 @@ async fn get_image_id(asset_id: u64) -> anyhow::Result<u64> {
 
 pub async fn upload_asset(
     contents: Vec<u8>,
-    name: &str,
+    display_name: &str,
+    description: Option<&str>,
     asset_type: AssetType,
     api_key: String,
     creator: AssetCreator,
@@ -74,12 +75,12 @@ pub async fn upload_asset(
         api_key: api_key.clone(),
         asset: AssetCreation {
             asset_type,
-            display_name: name.to_string(),
+            display_name: display_name.to_string(),
             creation_context: AssetCreationContext {
                 creator,
                 expected_price: None,
             },
-            description: "Uploaded by Asphalt".to_string(),
+            description: description.unwrap_or("Uploaded by Asphalt".to_string()),
         },
     };
     let operation = create_asset_with_contents(&create_params)

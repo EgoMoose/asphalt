@@ -1,13 +1,12 @@
-use std::{env, path::PathBuf};
-
 use crate::{
     args::Args,
-    config::{Config, CreatorType},
+    config::{AssetOverride, Config, CreatorType},
     LockFile,
 };
 use anyhow::Context;
 use rbxcloud::rbx::v1::assets::{AssetCreator, AssetGroupCreator, AssetUserCreator};
 use resvg::usvg::fontdb::Database;
+use std::{collections::HashMap, env, path::PathBuf};
 use tokio::fs::{create_dir_all, read_to_string};
 
 fn add_trailing_slash(path: &str) -> String {
@@ -40,6 +39,8 @@ pub struct State {
 
     pub existing_lockfile: LockFile,
     pub new_lockfile: LockFile,
+
+    pub overrides: Option<HashMap<String, AssetOverride>>,
 }
 
 impl State {
@@ -101,6 +102,7 @@ impl State {
             font_db,
             existing_lockfile,
             new_lockfile,
+            overrides: config.overrides.clone(),
         })
     }
 }

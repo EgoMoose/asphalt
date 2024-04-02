@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Debug, Deserialize, Serialize, PartialEq)]
 #[serde(rename_all = "snake_case")]
@@ -14,12 +15,21 @@ pub struct Creator {
     pub id: u64,
 }
 
+#[derive(Debug, Deserialize, Serialize, Clone)]
+pub struct AssetOverride {
+    pub display_name: Option<String>,
+    pub description: Option<String>,
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 pub struct Config {
     pub asset_dir: String,
     pub write_dir: String,
+
     pub creator: Creator,
     pub output_name: Option<String>,
     pub typescript: Option<bool>,
     pub luau: Option<bool>,
+
+    pub overrides: Option<HashMap<String, AssetOverride>>,
 }
